@@ -52,7 +52,7 @@ export default function Home() {
     e.preventDefault();
     setErrorLogin("");
     try {
-      const res = await axios.post("http://localhost:5260/api/Login", {
+      const res = await axios.post("https://sistema-financiero-fullstack.onrender.com/api/Login", {
         usuario: loginForm.usuario,
         clave: loginForm.clave
       });
@@ -72,7 +72,7 @@ export default function Home() {
   // --- FUNCIONES DEL SISTEMA ---
   const cargarClientes = async () => {
     try {
-      const res = await axios.get("http://localhost:5260/api/Clientes");
+      const res = await axios.get("https://sistema-financiero-fullstack.onrender.com/api/Clientes");
       setClientes(res.data);
       setCargando(false);
     } catch (error) { console.error(error); setCargando(false); }
@@ -81,7 +81,7 @@ export default function Home() {
   const guardarCliente = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await axios.post("http://localhost:5260/api/Clientes", nuevoCliente);
+      await axios.post("https://sistema-financiero-fullstack.onrender.com/api/Clientes", nuevoCliente);
       alert("✅ Cliente registrado");
       setMostrarFormCliente(false);
       cargarClientes();
@@ -98,7 +98,7 @@ export default function Home() {
 
   const cargarCuentasDeCliente = async (id: number) => {
     try {
-      const res = await axios.get(`http://localhost:5260/api/Cuentas/PorCliente/${id}`);
+      const res = await axios.get(`https://sistema-financiero-fullstack.onrender.com/api/Cuentas/PorCliente/${id}`);
       setCuentasDelCliente(res.data);
     } catch (error) { setCuentasDelCliente([]); }
   }
@@ -107,7 +107,7 @@ export default function Home() {
     e.preventDefault();
     if (!clienteSeleccionado) return;
     try {
-      await axios.post("http://localhost:5260/api/Cuentas", { clienteId: clienteSeleccionado.clienteId, ...nuevaCuenta });
+      await axios.post("https://sistema-financiero-fullstack.onrender.com/api/Cuentas", { clienteId: clienteSeleccionado.clienteId, ...nuevaCuenta });
       alert("💰 Cuenta creada");
       cargarCuentasDeCliente(clienteSeleccionado.clienteId);
     } catch (error) { alert("Error creando cuenta"); }
@@ -125,11 +125,11 @@ export default function Home() {
     if (!cuentaParaOperar) return;
     try {
       if (tipoOperacion === "Transferencia") {
-        await axios.post(`http://localhost:5260/api/Transacciones/Transferencia`, {
+        await axios.post(`https://sistema-financiero-fullstack.onrender.com/api/Transacciones/Transferencia`, {
           cuentaOrigenId: cuentaParaOperar.cuentaId, numeroCuentaDestino: cuentaDestino, monto: montoOperacion
         });
       } else {
-        await axios.post(`http://localhost:5260/api/Transacciones/${tipoOperacion}`, {
+        await axios.post(`https://sistema-financiero-fullstack.onrender.com/api/Transacciones/${tipoOperacion}`, {
           cuentaId: cuentaParaOperar.cuentaId, monto: montoOperacion
         });
       }
@@ -144,7 +144,7 @@ export default function Home() {
   const verHistorial = async (cuenta: Cuenta) => {
     setCuentaEnHistorial(cuenta);
     try {
-      const res = await axios.get(`http://localhost:5260/api/Transacciones/PorCuenta/${cuenta.cuentaId}`);
+      const res = await axios.get(`https://sistema-financiero-fullstack.onrender.com/api/Transacciones/PorCuenta/${cuenta.cuentaId}`);
       setHistorial(res.data);
     } catch (error) { setHistorial([]); }
   };
