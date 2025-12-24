@@ -5,7 +5,14 @@ var builder = WebApplication.CreateBuilder(args);
 
 // 1. Configurar la conexión a PostgreSQL
 // Le decimos al sistema que use la cadena de conexión que pusimos en appsettings.json
-var connectionString = builder.Configuration.GetConnectionString("CadenaConexionPostgres");
+// 1. Intentar leer la variable de entorno de Render (o del sistema)
+var connectionString = Environment.GetEnvironmentVariable("DB_CONNECTION");
+
+// 2. Si está vacía (estamos en local), leer del appsettings.json
+if (string.IsNullOrEmpty(connectionString))
+{
+    connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+}
 builder.Services.AddDbContext<FinancieraContext>(options =>
     options.UseNpgsql(connectionString));
 
