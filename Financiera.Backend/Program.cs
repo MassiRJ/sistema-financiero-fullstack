@@ -6,13 +6,8 @@ var builder = WebApplication.CreateBuilder(args);
 // 1. Configurar la conexión a PostgreSQL
 // Le decimos al sistema que use la cadena de conexión que pusimos en appsettings.json
 // 1. Intentar leer la variable de entorno de Render (o del sistema)
-var connectionString = Environment.GetEnvironmentVariable("DB_CONNECTION");
-
-// 2. Si está vacía (estamos en local), leer del appsettings.json
-if (string.IsNullOrEmpty(connectionString))
-{
-    connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-}
+// FORZANDO LA CONEXIÓN A NEON (Hardcoded)
+var connectionString = "Host=ep-curly-union-adms83ps-pooler.c-2.us-east-1.aws.neon.tech;Database=neondb;Username=neondb_owner;Password=npg_AtR2cSyxlHh9;SSL Mode=Require;Trust Server Certificate=true";
 builder.Services.AddDbContext<FinancieraContext>(options =>
     options.UseNpgsql(connectionString));
 
