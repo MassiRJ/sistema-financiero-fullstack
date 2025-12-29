@@ -24,12 +24,13 @@ public partial class FinancieraContext : DbContext
 
     public virtual DbSet<Transaccione> Transacciones { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseNpgsql("Host=localhost;Database=financiera_db;Username=postgres;Password=root");
+    // --- 🚨 AQUÍ BORRAMOS EL MÉTODO OnConfiguring QUE DABA PROBLEMAS ---
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        // Esta línea es VITAL para que encuentre las tablas en Neon
+        modelBuilder.HasDefaultSchema("financiera"); 
+
         modelBuilder.Entity<Cliente>(entity =>
         {
             entity.HasKey(e => e.ClienteId).HasName("clientes_pkey");
